@@ -6,6 +6,15 @@ import type { Advertisement, BookCover, CardState, GameSettings } from '../types
 import sarasaviLogo from '../imports/sarasavi_email_logo.jpg';
 import cardBoxLogo from '../imports/sarsavi logo.jpg';
 
+type FullscreenDocument = Document & {
+  webkitFullscreenElement?: Element | null;
+  webkitExitFullscreen?: () => Promise<void> | void;
+};
+
+type FullscreenElement = HTMLDivElement & {
+  webkitRequestFullscreen?: () => Promise<void> | void;
+};
+
 function shuffle<T>(items: T[]): T[] {
   const result = [...items];
   for (let index = result.length - 1; index > 0; index--) {
@@ -187,7 +196,10 @@ export default function GamePage() {
   const [winCountdown, setWinCountdown] = useState(DEFAULT_SETTINGS.successScreenDuration);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState('');
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [fullscreenError, setFullscreenError] = useState('');
 
+  const gameShellRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const winCountRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const cardCheckRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -247,6 +259,41 @@ export default function GamePage() {
       clearTimers();
     };
   }, [initGame]);
+
+  useEffect(() => {
+    const fullscreenDocument = document as FullscreenDocument;
+    const syncFullscreenState = () => {
+      setIsFullscreen(Boolean(document.fullscreenElement || fullscreenDocument.webkitFullscreenElement));
+    };
+
+    document.addEventListener('fullscreenchange', syncFullscreenState);
+    document.addEventListener('webkitfullscreenchange', syncFullscreenState);
+    return () => {
+      document.removeEventListener('fullscreenchange', syncFullscreenState);
+      document.removeEventListener('webkitfullscreenchange', syncFullscreenState);
+    };
+  }, []);
+
+  async function toggleFullscreen() {
+    const fullscreenDocument = document as FullscreenDocument;
+    const element = gameShellRef.current as FullscreenElement | null;
+    setFullscreenError('');
+
+    try {
+      if (document.fullscreenElement || fullscreenDocument.webkitFullscreenElement) {
+        if (document.exitFullscreen) await document.exitFullscreen();
+        else await fullscreenDocument.webkitExitFullscreen?.();
+      } else if (element?.requestFullscreen) {
+        await element.requestFullscreen();
+      } else if (element?.webkitRequestFullscreen) {
+        await element.webkitRequestFullscreen();
+      } else {
+        setFullscreenError('Fullscreen mode is not supported by this browser.');
+      }
+    } catch {
+      setFullscreenError('Unable to change fullscreen mode. Please try again.');
+    }
+  }
 
   function startTimer() {
     if (timerRef.current) return;
@@ -346,9 +393,9 @@ export default function GamePage() {
   const logo = imageSrc(settings.logoUrl) || sarasaviLogo;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col">
+    <div ref={gameShellRef} className="min-h-screen overflow-auto bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col">
       <header className="bg-white shadow-sm border-b border-blue-100">
-        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center">
+        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <div className="flex h-12 w-32 items-center justify-center rounded-xl bg-white px-3 shadow-lg ring-1 ring-blue-100">
               <img src={logo} alt="Sarasavi" className="max-h-9 max-w-full object-contain" />
@@ -358,10 +405,29 @@ export default function GamePage() {
               <p className="text-[10px] text-gray-400 hidden sm:block">{settings.instructions}</p>
             </div>
           </div>
+          <button
+            type="button"
+            onClick={toggleFullscreen}
+            aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
+            aria-pressed={isFullscreen}
+            title={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-blue-100 bg-blue-50 text-[#1a50a0] transition-colors hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-[#1a50a0]"
+          >
+            {isFullscreen ? (
+              <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 3v6H3M15 3v6h6M9 21v-6H3M15 21v-6h6" />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5" />
+              </svg>
+            )}
+          </button>
         </div>
       </header>
 
       <main className="flex-1 max-w-5xl mx-auto w-full px-3 py-5 flex flex-col gap-4">
+        {fullscreenError && <div role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-2 text-sm text-red-700">{fullscreenError}</div>}
         <AdBanner position="between" ads={ads} showAds={settings.showAds} />
         <AdBanner position="above" ads={ads} showAds={settings.showAds} />
         <div className="bg-white rounded-2xl shadow-sm border border-blue-100 px-4 py-3 flex items-center justify-between gap-2 flex-wrap">
