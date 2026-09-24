@@ -1,0 +1,83 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function validStats(data) {
+      return data.keys().hasOnly(['totalPlayed', 'totalCompleted', 'totalFailed'])
+        && data.totalPlayed is int
+        && data.totalCompleted is int
+        && data.totalFailed is int
+        && data.totalPlayed >= 0
+        && data.totalCompleted >= 0
+        && data.totalFailed >= 0;
+    }
+
+    // Existing Attach Game collections in the same Firebase project.
+    match /sarasavi_books/{bookId} {
+      allow read: if true;
+      allow write: if signedIn();
+    }
+
+    match /sarasavi_config/{documentId} {
+      allow read: if true;
+      allow write: if signedIn();
+    }
+
+    match /sarasavi_memory_books/{bookId} {
+      allow read: if true;
+      allow create, update: if signedIn()
+        && request.resource.data.title is string
+        && request.resource.data.author is string
+        && request.resource.data.imageUrl is string
+        && request.resource.data.imageUrl.size() <= 900000;
+      allow delete: if signedIn();
+    }
+
+    match /sarasavi_memory_ads/{adId} {
+      allow read: if true;
+      allow create, update: if signedIn()
+        && request.resource.data.title is string
+        && request.resource.data.type in ['image', 'video', 'text']
+        && (!request.resource.data.keys().hasAny(['imageUrl']) || request.resource.data.imageUrl.size() <= 900000);
+      allow delete: if signedIn();
+    }
+
+    match /sarasavi_memory_config/game_settings {
+      allow read: if true;
+      allow write: if signedIn()
+        && request.resource.data.duration is int
+        && request.resource.data.duration >= 5
+        && request.resource.data.duration <= 600
+        && (!request.resource.data.keys().hasAny(['logoUrl'])
+          || request.resource.data.logoUrl == null
+          || request.resource.data.logoUrl.size() <= 600000);
+    }
+
+    match /sarasavi_memory_config/global_stats {
+      allow read: if true;
+      allow create: if validStats(request.resource.data)
+        && request.resource.data.totalPlayed <= 1
+        && request.resource.data.totalCompleted <= 1
+        && request.resource.data.totalFailed <= 1;
+      allow update: if validStats(request.resource.data)
+        && request.resource.data.totalPlayed >= resource.data.totalPlayed
+        && request.resource.data.totalCompleted >= resource.data.totalCompleted
+        && request.resource.data.totalFailed >= resource.data.totalFailed
+        && request.resource.data.totalPlayed - resource.data.totalPlayed <= 1
+        && request.resource.data.totalCompleted - resource.data.totalCompleted <= 1
+        && request.resource.data.totalFailed - resource.data.totalFailed <= 1
+        && (request.resource.data.totalPlayed - resource.data.totalPlayed
+          + request.resource.data.totalCompleted - resource.data.totalCompleted
+          + request.resource.data.totalFailed - resource.data.totalFailed) == 1;
+      allow delete: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
