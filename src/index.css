@@ -74,6 +74,11 @@ body {
   100% { transform: translateY(-120vh); opacity: 0; }
 }
 
+@keyframes children-sway {
+  0%, 100% { margin-left: -6px; }
+  50% { margin-left: 6px; }
+}
+
 @keyframes children-twinkle {
   0%, 100% { opacity: 0.15; transform: scale(0.9); }
   50% { opacity: 0.7; transform: scale(1.05); }
@@ -127,13 +132,11 @@ body {
 .children-day-balloon {
   position: absolute;
   bottom: -60px;
-  width: 30px;
-  height: 38px;
+  width: 36px;
+  height: 46px;
   border-radius: 50% 50% 46% 46%;
   opacity: 0;
-  animation-name: children-float;
-  animation-timing-function: ease-in;
-  animation-iteration-count: infinite;
+  animation: children-float 11s ease-in infinite, children-sway 3.2s ease-in-out infinite;
 }
 
 .children-day-balloon::after {
@@ -175,6 +178,34 @@ body {
   animation-delay: 3s;
 }
 
+.children-day-balloon-five {
+  left: 2%;
+  background: #a78bfa;
+  animation-duration: 13s;
+  animation-delay: 1.8s;
+}
+
+.children-day-balloon-six {
+  left: 44%;
+  background: #22d3ee;
+  animation-duration: 10.8s;
+  animation-delay: 3.8s;
+}
+
+.children-day-balloon-seven {
+  right: 30%;
+  background: #fb7185;
+  animation-duration: 12.6s;
+  animation-delay: 0.9s;
+}
+
+.children-day-balloon-eight {
+  right: 12%;
+  background: #f97316;
+  animation-duration: 14s;
+  animation-delay: 4.4s;
+}
+
 .children-day-star {
   position: absolute;
   color: rgba(250, 204, 21, 0.7);
@@ -185,14 +216,16 @@ body {
 .children-day-star-one { left: 18%; top: 24%; }
 .children-day-star-two { right: 16%; top: 18%; animation-delay: 0.8s; }
 .children-day-star-three { left: 64%; top: 32%; animation-delay: 1.4s; }
+.children-day-star-four { left: 82%; top: 38%; animation-delay: 1.9s; }
+.children-day-star-five { left: 36%; top: 14%; animation-delay: 2.2s; }
 
 .children-day-book {
   position: absolute;
   bottom: -50px;
-  font-size: 28px;
+  font-size: 34px;
   opacity: 0;
   filter: drop-shadow(0 4px 10px rgba(30, 58, 138, 0.2));
-  animation: children-book-float linear infinite;
+  animation: children-book-float linear infinite, children-sway 4.1s ease-in-out infinite;
 }
 
 .children-day-book-one {
@@ -203,32 +236,46 @@ body {
 
 .children-day-book-two {
   left: 38%;
-  font-size: 24px;
+  font-size: 30px;
   animation-duration: 14s;
   animation-delay: 2.4s;
 }
 
 .children-day-book-three {
   right: 26%;
-  font-size: 26px;
+  font-size: 32px;
   animation-duration: 15s;
   animation-delay: 1.2s;
 }
 
 .children-day-book-four {
   right: 8%;
-  font-size: 24px;
+  font-size: 30px;
   animation-duration: 17s;
   animation-delay: 3.2s;
+}
+
+.children-day-book-five {
+  left: 56%;
+  font-size: 32px;
+  animation-duration: 13.5s;
+  animation-delay: 0.9s;
+}
+
+.children-day-book-six {
+  right: 40%;
+  font-size: 31px;
+  animation-duration: 16.5s;
+  animation-delay: 2.8s;
 }
 
 .children-day-kid {
   position: absolute;
   bottom: -48px;
   opacity: 0;
-  font-size: 26px;
+  font-size: 32px;
   filter: drop-shadow(0 4px 8px rgba(59, 130, 246, 0.2));
-  animation: children-kid-float linear infinite;
+  animation: children-kid-float linear infinite, children-sway 3.7s ease-in-out infinite;
 }
 
 .children-day-kid-one {
@@ -239,14 +286,14 @@ body {
 
 .children-day-kid-two {
   left: 48%;
-  font-size: 24px;
+  font-size: 30px;
   animation-duration: 16s;
   animation-delay: 2s;
 }
 
 .children-day-kid-three {
   right: 34%;
-  font-size: 25px;
+  font-size: 31px;
   animation-duration: 19s;
   animation-delay: 1.6s;
 }
@@ -259,9 +306,23 @@ body {
 
 .children-day-kid-five {
   left: 6%;
-  font-size: 22px;
+  font-size: 28px;
   animation-duration: 20s;
   animation-delay: 4.2s;
+}
+
+.children-day-kid-six {
+  right: 4%;
+  font-size: 30px;
+  animation-duration: 18.5s;
+  animation-delay: 2.6s;
+}
+
+.children-day-kid-seven {
+  left: 72%;
+  font-size: 29px;
+  animation-duration: 21s;
+  animation-delay: 5s;
 }
 
 /* Scrollbar */
