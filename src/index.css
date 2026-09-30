@@ -67,6 +67,111 @@ body {
   animation: pulse-red 0.7s ease-in-out infinite;
 }
 
+/* Children's Day background animation */
+@keyframes children-float {
+  0% { transform: translateY(24px); opacity: 0; }
+  20% { opacity: 0.9; }
+  100% { transform: translateY(-120vh); opacity: 0; }
+}
+
+@keyframes children-twinkle {
+  0%, 100% { opacity: 0.15; transform: scale(0.9); }
+  50% { opacity: 0.7; transform: scale(1.05); }
+}
+
+.children-day-glow {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(40px);
+  opacity: 0.35;
+}
+
+.children-day-glow-one {
+  width: 220px;
+  height: 220px;
+  left: -50px;
+  top: 10%;
+  background: #f472b6;
+}
+
+.children-day-glow-two {
+  width: 260px;
+  height: 260px;
+  right: -80px;
+  top: 30%;
+  background: #fb923c;
+}
+
+.children-day-glow-three {
+  width: 230px;
+  height: 230px;
+  left: 45%;
+  bottom: -100px;
+  background: #facc15;
+}
+
+.children-day-balloon {
+  position: absolute;
+  bottom: -60px;
+  width: 30px;
+  height: 38px;
+  border-radius: 50% 50% 46% 46%;
+  opacity: 0;
+  animation-name: children-float;
+  animation-timing-function: ease-in;
+  animation-iteration-count: infinite;
+}
+
+.children-day-balloon::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  width: 1px;
+  height: 36px;
+  background: rgba(100, 116, 139, 0.35);
+  transform: translateX(-50%);
+}
+
+.children-day-balloon-one {
+  left: 8%;
+  background: #ec4899;
+  animation-duration: 11s;
+  animation-delay: 0.4s;
+}
+
+.children-day-balloon-two {
+  left: 28%;
+  background: #60a5fa;
+  animation-duration: 9.5s;
+  animation-delay: 2.2s;
+}
+
+.children-day-balloon-three {
+  right: 20%;
+  background: #34d399;
+  animation-duration: 10.5s;
+  animation-delay: 1.2s;
+}
+
+.children-day-balloon-four {
+  right: 6%;
+  background: #f59e0b;
+  animation-duration: 12s;
+  animation-delay: 3s;
+}
+
+.children-day-star {
+  position: absolute;
+  color: rgba(250, 204, 21, 0.7);
+  font-size: 14px;
+  animation: children-twinkle 2.4s ease-in-out infinite;
+}
+
+.children-day-star-one { left: 18%; top: 24%; }
+.children-day-star-two { right: 16%; top: 18%; animation-delay: 0.8s; }
+.children-day-star-three { left: 64%; top: 32%; animation-delay: 1.4s; }
+
 /* Scrollbar */
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }

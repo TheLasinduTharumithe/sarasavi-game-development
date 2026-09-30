@@ -6,6 +6,7 @@ import { firebaseConfigurationError } from '../firebase';
 import { imageFileToBase64, imageSrc } from '../imageUtils';
 import type { Advertisement, BookCover, GameSettings } from '../types';
 import sarasaviLogo from '../imports/sarasavi_email_logo.jpg';
+import { ChildrenDayBanner } from '../components/ChildrenDayDecor';
 
 // ─── Confirm dialog (replaces native confirm() to avoid harness conflicts) ────
 
@@ -821,6 +822,7 @@ function Dashboard({ user }: { user: User }) {
         </header>
 
         <main className="flex-1 p-4 md:p-6">
+          <ChildrenDayBanner className="mb-4" />
           {tab === 'overview' && <Overview />}
           {tab === 'books' && <BookCovers />}
           {tab === 'settings' && <GameSettingsPanel />}

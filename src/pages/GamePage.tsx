@@ -5,6 +5,7 @@ import { imageSrc } from '../imageUtils';
 import type { Advertisement, BookCover, CardState, GameSettings } from '../types';
 import sarasaviLogo from '../imports/sarasavi_email_logo.jpg';
 import cardBoxLogo from '../imports/sarsavi logo.jpg';
+import { ChildrenDayBackground, ChildrenDayBanner } from '../components/ChildrenDayDecor';
 
 type FullscreenDocument = Document & {
   webkitFullscreenElement?: Element | null;
@@ -155,6 +156,7 @@ function WinPopup({ onNewGame, settings, countdown, ads, logo }: {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
       <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full p-8 text-center">
+        <ChildrenDayBanner compact className="mb-4" />
         <img src={logo} alt="Sarasavi" className="mx-auto mb-5 h-16 w-auto object-contain" />
         <h2 className="font-serif text-2xl font-bold text-[#1a50a0] mb-1">{title || 'Congratulations!'}</h2>
         <p className="text-gray-600 mb-6 text-sm leading-relaxed">{description}</p>
@@ -393,8 +395,9 @@ export default function GamePage() {
   const logo = imageSrc(settings.logoUrl) || sarasaviLogo;
 
   return (
-    <div ref={gameShellRef} className="min-h-screen overflow-auto bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col">
-      <header className="bg-white shadow-sm border-b border-blue-100">
+    <div ref={gameShellRef} className="relative isolate min-h-screen overflow-auto bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col">
+      <ChildrenDayBackground />
+      <header className="relative z-10 bg-white/95 shadow-sm border-b border-blue-100 backdrop-blur-sm">
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <div className="flex h-12 w-32 items-center justify-center rounded-xl bg-white px-3 shadow-lg ring-1 ring-blue-100">
@@ -426,7 +429,8 @@ export default function GamePage() {
         </div>
       </header>
 
-      <main className="flex-1 max-w-5xl mx-auto w-full px-3 py-5 flex flex-col gap-4">
+      <main className="relative z-10 flex-1 max-w-5xl mx-auto w-full px-3 py-5 flex flex-col gap-4">
+        <ChildrenDayBanner />
         {fullscreenError && <div role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-2 text-sm text-red-700">{fullscreenError}</div>}
         <AdBanner position="between" ads={ads} showAds={settings.showAds} />
         <AdBanner position="above" ads={ads} showAds={settings.showAds} />
