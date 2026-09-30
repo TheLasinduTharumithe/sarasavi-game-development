@@ -98,6 +98,18 @@ body {
   100% { transform: translateY(-105vh) rotate(-4deg); opacity: 0; }
 }
 
+@keyframes children-icon-drift {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.18; }
+  50% { transform: translateY(-10px) scale(1.08); opacity: 0.33; }
+}
+
+.children-day-floating-icon {
+  position: absolute;
+  opacity: 0.2;
+  animation: children-icon-drift 7s ease-in-out infinite;
+  filter: drop-shadow(0 3px 8px rgba(59, 130, 246, 0.2));
+}
+
 .children-day-glow {
   position: absolute;
   border-radius: 9999px;

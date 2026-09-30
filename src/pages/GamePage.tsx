@@ -404,7 +404,7 @@ export default function GamePage() {
               <img src={logo} alt="Sarasavi" className="max-h-9 max-w-full object-contain" />
             </div>
             <div>
-              <h1 className="font-serif text-lg font-bold text-[#1a50a0] leading-tight">{settings.gameTitle}</h1>
+              <h1 className="font-serif text-2xl sm:text-3xl font-black text-[#1a50a0] leading-tight">{settings.gameTitle}</h1>
               <p className="text-[10px] text-gray-400 hidden sm:block">{settings.instructions}</p>
             </div>
           </div>
