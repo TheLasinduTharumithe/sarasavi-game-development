@@ -28,6 +28,15 @@ export function ChildrenDayBackground() {
       <div className="children-day-star children-day-star-one">★</div>
       <div className="children-day-star children-day-star-two">★</div>
       <div className="children-day-star children-day-star-three">★</div>
+      <div className="children-day-book children-day-book-one">📚</div>
+      <div className="children-day-book children-day-book-two">📖</div>
+      <div className="children-day-book children-day-book-three">📘</div>
+      <div className="children-day-book children-day-book-four">📕</div>
+      <div className="children-day-kid children-day-kid-one">🧒</div>
+      <div className="children-day-kid children-day-kid-two">👧</div>
+      <div className="children-day-kid children-day-kid-three">🧸</div>
+      <div className="children-day-kid children-day-kid-four">🪁</div>
+      <div className="children-day-kid children-day-kid-five">🎠</div>
     </div>
   );
 }

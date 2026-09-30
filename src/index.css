@@ -79,6 +79,20 @@ body {
   50% { opacity: 0.7; transform: scale(1.05); }
 }
 
+@keyframes children-book-float {
+  0% { transform: translateY(16px) rotate(-4deg); opacity: 0; }
+  15% { opacity: 0.5; }
+  50% { transform: translateY(-45vh) rotate(5deg); opacity: 0.75; }
+  100% { transform: translateY(-110vh) rotate(-3deg); opacity: 0; }
+}
+
+@keyframes children-kid-float {
+  0% { transform: translateY(10px) rotate(-5deg); opacity: 0; }
+  20% { opacity: 0.45; }
+  60% { transform: translateY(-50vh) rotate(6deg); opacity: 0.7; }
+  100% { transform: translateY(-105vh) rotate(-4deg); opacity: 0; }
+}
+
 .children-day-glow {
   position: absolute;
   border-radius: 9999px;
@@ -171,6 +185,84 @@ body {
 .children-day-star-one { left: 18%; top: 24%; }
 .children-day-star-two { right: 16%; top: 18%; animation-delay: 0.8s; }
 .children-day-star-three { left: 64%; top: 32%; animation-delay: 1.4s; }
+
+.children-day-book {
+  position: absolute;
+  bottom: -50px;
+  font-size: 28px;
+  opacity: 0;
+  filter: drop-shadow(0 4px 10px rgba(30, 58, 138, 0.2));
+  animation: children-book-float linear infinite;
+}
+
+.children-day-book-one {
+  left: 12%;
+  animation-duration: 16s;
+  animation-delay: 0.5s;
+}
+
+.children-day-book-two {
+  left: 38%;
+  font-size: 24px;
+  animation-duration: 14s;
+  animation-delay: 2.4s;
+}
+
+.children-day-book-three {
+  right: 26%;
+  font-size: 26px;
+  animation-duration: 15s;
+  animation-delay: 1.2s;
+}
+
+.children-day-book-four {
+  right: 8%;
+  font-size: 24px;
+  animation-duration: 17s;
+  animation-delay: 3.2s;
+}
+
+.children-day-kid {
+  position: absolute;
+  bottom: -48px;
+  opacity: 0;
+  font-size: 26px;
+  filter: drop-shadow(0 4px 8px rgba(59, 130, 246, 0.2));
+  animation: children-kid-float linear infinite;
+}
+
+.children-day-kid-one {
+  left: 20%;
+  animation-duration: 18s;
+  animation-delay: 0.8s;
+}
+
+.children-day-kid-two {
+  left: 48%;
+  font-size: 24px;
+  animation-duration: 16s;
+  animation-delay: 2s;
+}
+
+.children-day-kid-three {
+  right: 34%;
+  font-size: 25px;
+  animation-duration: 19s;
+  animation-delay: 1.6s;
+}
+
+.children-day-kid-four {
+  right: 18%;
+  animation-duration: 17s;
+  animation-delay: 3.4s;
+}
+
+.children-day-kid-five {
+  left: 6%;
+  font-size: 22px;
+  animation-duration: 20s;
+  animation-delay: 4.2s;
+}
 
 /* Scrollbar */
 ::-webkit-scrollbar { width: 5px; }
