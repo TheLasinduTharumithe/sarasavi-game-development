@@ -5,6 +5,7 @@ import { imageSrc } from '../imageUtils';
 import type { Advertisement, BookCover, CardState, GameSettings } from '../types';
 import sarasaviLogo from '../imports/sarasavi_email_logo.jpg';
 import cardBoxLogo from '../imports/sarsavi logo.jpg';
+import childrensDayPost from '../assets/childrens-day-post.jpg';
 import { ChildrenDayBackground, ChildrenDayBanner } from '../components/ChildrenDayDecor';
 
 type FullscreenDocument = Document & {
@@ -183,6 +184,32 @@ function LosePopup({ onRetry, settings, ads, logo }: { onRetry: () => void; sett
   );
 }
 
+function GameStartPopup({ onStart }: { onStart: () => void }) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-3 sm:p-4">
+      <div className="bg-white rounded-3xl shadow-2xl max-w-sm sm:max-w-md w-full p-5 sm:p-6 text-center relative border border-blue-100 flex flex-col items-center max-h-[92vh] overflow-y-auto">
+        <ChildrenDayBanner compact className="w-full mb-3" />
+        <div className="relative w-full overflow-hidden rounded-2xl shadow-md border border-amber-100 bg-white mb-4 flex items-center justify-center">
+          <img
+            src={childrensDayPost}
+            alt="Happy Children's Day - Sarasavi"
+            className="w-full h-auto max-h-[52vh] object-contain block rounded-xl"
+          />
+        </div>
+        <button
+          type="button"
+          onClick={onStart}
+          className="w-full bg-gradient-to-r from-[#1a50a0] via-[#2563eb] to-[#1a50a0] hover:from-[#143d7e] hover:to-[#143d7e] text-white font-black text-base sm:text-lg py-3 px-6 rounded-2xl shadow-lg hover:shadow-xl transition-all transform hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer"
+        >
+          <span>🎈</span>
+          <span>Start Now</span>
+          <span>🎮</span>
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function GamePage() {
   const [settings, setSettings] = useState<GameSettings>(DEFAULT_SETTINGS);
   const [books, setBooks] = useState<BookCover[]>([]);
@@ -196,6 +223,7 @@ export default function GamePage() {
   const [gameStarted, setGameStarted] = useState(false);
   const [gameOver, setGameOver] = useState<'win' | 'lose' | null>(null);
   const [winCountdown, setWinCountdown] = useState(DEFAULT_SETTINGS.successScreenDuration);
+  const [showStartPopup, setShowStartPopup] = useState(true);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState('');
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -219,7 +247,7 @@ export default function GamePage() {
     cardCheckRef.current = null;
   }
 
-  const initGame = useCallback((availableBooks = availableBooksRef.current, freshSettings = settingsRef.current) => {
+  const initGame = useCallback((availableBooks = availableBooksRef.current, freshSettings = settingsRef.current, showPopup = true) => {
     gameSequenceRef.current += 1;
     clearTimers();
     const activeBooks = availableBooks.filter(book => book.active);
@@ -235,8 +263,18 @@ export default function GamePage() {
     setGameStarted(false);
     setGameOver(null);
     setWinCountdown(freshSettings.successScreenDuration);
+    if (showPopup) setShowStartPopup(true);
     if (chosen.length === 8) void store.incrementStats('totalPlayed').catch(() => undefined);
   }, []);
+
+  function handleStartNow() {
+    playGameSound('tap', settingsRef.current.soundEffects);
+    setShowStartPopup(false);
+    if (!gameStarted) {
+      setGameStarted(true);
+      startTimer();
+    }
+  }
 
   useEffect(() => {
     let cancelled = false;
@@ -457,7 +495,7 @@ export default function GamePage() {
           <div className="grid grid-cols-4 gap-2 sm:gap-3 flex-1 min-h-0">
             {cards.map(card => {
               const book = bookMap[card.bookCoverId];
-              return book ? <GameCard key={card.id} card={card} book={book} onClick={() => handleCardClick(card)} disabled={isChecking || Boolean(gameOver)} /> : null;
+              return book ? <GameCard key={card.id} card={card} book={book} onClick={() => handleCardClick(card)} disabled={isChecking || Boolean(gameOver) || showStartPopup} /> : null;
             })}
           </div>
         )}
@@ -466,6 +504,7 @@ export default function GamePage() {
         <p className="text-center text-[10px] text-gray-400 mt-3">© {new Date().getFullYear()} Sarasavi Bookshop. All rights reserved.</p>
       </main>
 
+      {showStartPopup && !gameOver && !notEnoughBooks && <GameStartPopup onStart={handleStartNow} />}
       {gameOver === 'win' && <WinPopup onNewGame={() => initGame()} settings={settings} countdown={winCountdown} ads={ads} logo={logo} />}
       {gameOver === 'lose' && <LosePopup onRetry={() => initGame()} settings={settings} ads={ads} logo={logo} />}
     </div>
